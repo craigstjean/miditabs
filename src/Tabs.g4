@@ -4,12 +4,13 @@ grammar Tabs ;
  * Parser Rules
  */
 tabs       : line+ EOF ;
-line       : (tuning | file | measures | notes | tempo | chords) NEWLINE ;
+line       : (tuning | file | measures | notes | tempo | line_chg | chords) NEWLINE ;
 tuning     : TUNING NOTE* ;
 file       : FILE FILENAME ;
 measures   : MEASURES NUMBER SEP NUMBER ;
 notes      : NOTES NUMBER SEP NUMBER ;
 tempo      : TEMPO NUMBER ;
+line_chg   : LINE NUMBER ;
 chords     : (EMPTY | MUTE | NUMBER NUMBER_SEP? | note_chg)* ;
 note_chg   : NOTE_CHANGE NUMBER SEP NUMBER ;
 
@@ -21,6 +22,7 @@ FILE       : 'File' ;
 MEASURES   : 'Measures' ;
 NOTES      : 'Notes' ;
 TEMPO      : 'Tempo' ;
+LINE       : 'Line' ;
 
 NUMBER     : [0-9]+ ;
 SEP        : '/' ;
