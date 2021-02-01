@@ -1,4 +1,6 @@
 build
+grun_src
+dist
 
 .fake
 .ionide
