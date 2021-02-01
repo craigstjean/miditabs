@@ -14,7 +14,7 @@ public:
   enum {
     TUNING = 1, FILE = 2, MEASURES = 3, NOTES = 4, TEMPO = 5, NUMBER = 6, 
     SEP = 7, EMPTY = 8, MUTE = 9, NUMBER_SEP = 10, NOTE = 11, FILENAME = 12, 
-    NEWLINE = 13, WHITESPACE = 14, MEASURE_SP = 15
+    NOTE_CHANGE = 13, NEWLINE = 14, WHITESPACE = 15, MEASURE_SP = 16
   };
 
   explicit TabsLexer(antlr4::CharStream *input);

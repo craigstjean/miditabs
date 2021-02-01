@@ -14,12 +14,12 @@ public:
   enum {
     TUNING = 1, FILE = 2, MEASURES = 3, NOTES = 4, TEMPO = 5, NUMBER = 6, 
     SEP = 7, EMPTY = 8, MUTE = 9, NUMBER_SEP = 10, NOTE = 11, FILENAME = 12, 
-    NEWLINE = 13, WHITESPACE = 14, MEASURE_SP = 15
+    NOTE_CHANGE = 13, NEWLINE = 14, WHITESPACE = 15, MEASURE_SP = 16
   };
 
   enum {
     RuleTabs = 0, RuleLine = 1, RuleTuning = 2, RuleFile = 3, RuleMeasures = 4, 
-    RuleNotes = 5, RuleTempo = 6, RuleChords = 7
+    RuleNotes = 5, RuleTempo = 6, RuleChords = 7, RuleNote_chg = 8
   };
 
   explicit TabsParser(antlr4::TokenStream *input);
@@ -39,7 +39,8 @@ public:
   class MeasuresContext;
   class NotesContext;
   class TempoContext;
-  class ChordsContext; 
+  class ChordsContext;
+  class Note_chgContext; 
 
   class  TabsContext : public antlr4::ParserRuleContext {
   public:
@@ -160,6 +161,8 @@ public:
     antlr4::tree::TerminalNode* MUTE(size_t i);
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
+    std::vector<Note_chgContext *> note_chg();
+    Note_chgContext* note_chg(size_t i);
     std::vector<antlr4::tree::TerminalNode *> NUMBER_SEP();
     antlr4::tree::TerminalNode* NUMBER_SEP(size_t i);
 
@@ -169,6 +172,22 @@ public:
   };
 
   ChordsContext* chords();
+
+  class  Note_chgContext : public antlr4::ParserRuleContext {
+  public:
+    Note_chgContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *NOTE_CHANGE();
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+    antlr4::tree::TerminalNode *SEP();
+
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  Note_chgContext* note_chg();
 
 
 private:

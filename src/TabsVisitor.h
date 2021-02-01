@@ -35,6 +35,8 @@ public:
 
     virtual antlrcpp::Any visitChords(TabsParser::ChordsContext *context) = 0;
 
+    virtual antlrcpp::Any visitNote_chg(TabsParser::Note_chgContext *context) = 0;
+
 
 };
 

@@ -47,6 +47,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitNote_chg(TabsParser::Note_chgContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
 
 };
 
