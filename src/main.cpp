@@ -1,30 +1,29 @@
 #include <iostream>
 
-#include <antlr4-runtime.h>
-
-#include <MidiFile.h>
-#include <Options.h>
-
-#include "TabsLexer.h"
-#include "TabsParser.h"
-#include "TabsBaseVisitor.h"
-
-using namespace antlr4;
+#include "processor.h"
 
 int main(int argc, const char **argv)
 {
-    smf::Options options;
-    
-    std::ifstream stream;
-    stream.open(argv[1]);
-    
-    ANTLRInputStream input(stream);
-    TabsLexer lexer(&input);
-    CommonTokenStream tokens(&lexer);
-    TabsParser parser(&tokens);    
-    TabsParser::FileContext* tree = parser.file();
-    TabsBaseVisitor visitor;
-    antlrcpp::Any tabs = visitor.visitFile(tree);
-    
+    if (argc < 2)
+    {
+        std::cerr << "USAGE: " << argv[0] << " file1 [file2...]\n";
+        return -1;
+    }
+
+    for (auto i = 1; i < argc; ++i)
+    {
+        std::cout << "Processing '" << argv[i] << "'...\n";
+
+        try
+        {
+            Processor processor(argv[i]);
+            processor.execute();
+        }
+        catch(const OpenFileError& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
+
     return 0;
 }

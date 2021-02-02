@@ -6,17 +6,5 @@ dist
 .ionide
 
 src/.antlr
-
-src/Tabs.interp
-src/Tabs.tokens
-src/TabsBaseVisitor.cpp
-src/TabsBaseVisitor.h
-src/TabsLexer.cpp
-src/TabsLexer.h
-src/TabsLexer.interp
-src/TabsLexer.tokens
-src/TabsParser.cpp
-src/TabsParser.h
-src/TabsVisitor.cpp
-src/TabsVisitor.h
+src/antlr
 
