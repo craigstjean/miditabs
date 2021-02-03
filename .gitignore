@@ -4,6 +4,7 @@ dist
 
 .fake
 .ionide
+.DS_Store
 
 src/.antlr
 src/antlr

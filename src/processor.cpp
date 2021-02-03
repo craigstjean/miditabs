@@ -27,4 +27,10 @@ void Processor::execute()
     {
         std::cout << *command.get() << std::endl;
     }
+
+    std::shared_ptr<MidiContext> context = std::make_shared<MidiContext>();
+    for (auto command : commands.commands())
+    {
+        command->execute(context);
+    }
 }

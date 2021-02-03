@@ -2,7 +2,7 @@
 
 void MidiCommandTuning::execute(std::shared_ptr<MidiContext> context)
 {
-
+    context->tuning = notes;
 }
 
 void MidiCommandTuning::os(std::ostream &out) const

@@ -2,7 +2,7 @@
 
 void MidiCommandNoteChange::execute(std::shared_ptr<MidiContext> context)
 {
-
+    context->tick_speed = length;
 }
 
 void MidiCommandNoteChange::os(std::ostream &out) const
