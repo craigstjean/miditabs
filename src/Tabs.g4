@@ -8,9 +8,11 @@ grammar Tabs ;
  * Parser Rules
  */
 tabs       : line+ EOF ;
-line       : (tuning | file | measures | notes | tempo | line_chg | chords) NEWLINE ;
+line       : (tuning | file | instrument | attack | measures | notes | tempo | line_chg | chords) NEWLINE ;
 tuning     : TUNING NOTE* ;
 file       : FILE FILENAME ;
+instrument : INSTRUMENT NUMBER ;
+attack     : ATTACK NUMBER ;
 measures   : MEASURES NUMBER SEP NUMBER ;
 notes      : NOTES NUMBER SEP NUMBER ;
 tempo      : TEMPO NUMBER ;
@@ -23,6 +25,8 @@ note_chg   : NOTE_CHANGE NUMBER SEP NUMBER ;
  */
 TUNING     : 'Tuning' { ignore = true; } ;
 FILE       : 'File' { ignore = true; } ;
+INSTRUMENT : 'Instrument' { ignore = true; };
+ATTACK     : 'Attack' { ignore = true; };
 MEASURES   : 'Measures' { ignore = true; } ;
 NOTES      : 'Notes' { ignore = true; } ;
 TEMPO      : 'Tempo' { ignore = true; } ;

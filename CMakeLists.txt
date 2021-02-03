@@ -15,8 +15,10 @@ set(SOURCE_FILES src/main.cpp
                  src/processor.cpp
                  src/midi_visitor.cpp
                  src/midi_commands.cpp
+                 src/midi_command_attack.cpp
                  src/midi_command_chords.cpp
                  src/midi_command_file.cpp
+                 src/midi_command_instrument.cpp
                  src/midi_command_line_change.cpp
                  src/midi_command_measures.cpp
                  src/midi_command_note_change.cpp

@@ -3,7 +3,7 @@
 void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 {
     int channel = 0;
-    int velocity = 40;
+    int velocity = context->velocity;
     int tick = context->track_tick(context->current_track);
     int tpq = context->midifile()->getTPQ();
 

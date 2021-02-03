@@ -40,6 +40,8 @@ public:
         current_track = 0;
         tick_speed = 0.25;
         current_tempo = 120;
+        velocity = 25;
+        instrument = 0;
     }
 
     void new_file(std::string filename);
@@ -52,6 +54,8 @@ public:
 
     double tick_speed;
     int current_tempo;
+    int velocity;
+    int instrument;
     
     std::vector<MidiNote> tuning;
 private:

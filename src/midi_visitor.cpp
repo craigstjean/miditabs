@@ -4,8 +4,10 @@
 #include "midi_visitor.h"
 #include "midi_commands.h"
 
+#include "midi_command_attack.h"
 #include "midi_command_chords.h"
 #include "midi_command_file.h"
+#include "midi_command_instrument.h"
 #include "midi_command_line_change.h"
 #include "midi_command_measures.h"
 #include "midi_command_note_change.h"
@@ -40,6 +42,14 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitLine(TabsParser::LineContext *con
     else if (context->file())
     {
         return visitFile(context->file());
+    }
+    else if (context->instrument())
+    {
+        return visitInstrument(context->instrument());
+    }
+    else if (context->attack())
+    {
+        return visitAttack(context->attack());
     }
     else if (context->measures())
     {
@@ -145,6 +155,22 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitFile(TabsParser::FileContext *con
     // file       : FILE FILENAME ;
     auto command = std::make_unique<MidiCommandFile>();
     command->name = context->FILENAME()->getText();
+    return command;
+}
+
+std::unique_ptr<MidiCommand> MidiVisitor::visitInstrument(TabsParser::InstrumentContext *context)
+{
+    // instrument : INSTRUMENT NUMBER ;
+    auto command = std::make_unique<MidiCommandInstrument>();
+    command->instrument = std::stoi(context->NUMBER()->getText());
+    return command;
+}
+
+std::unique_ptr<MidiCommand> MidiVisitor::visitAttack(TabsParser::AttackContext *context)
+{
+    // attack     : ATTACK NUMBER ;
+    auto command = std::make_unique<MidiCommandAttack>();
+    command->velocity = std::stoi(context->NUMBER()->getText());
     return command;
 }
 

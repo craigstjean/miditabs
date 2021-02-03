@@ -41,7 +41,6 @@ int MidiContext::track_tick(int track)
     {
         int track = m_track_ticks.size();
         int channel = 0;
-        int instrument = 30;
         m_midi_file->get()->addTimbre(track, 0, channel, instrument);
         m_track_ticks.push_back(0);
     }
@@ -55,7 +54,6 @@ void MidiContext::set_track_tick(int track, int tick)
     {
         int track = m_track_ticks.size();
         int channel = 0;
-        int instrument = 30;
         m_midi_file->get()->addTimbre(track, 0, channel, instrument);
         m_track_ticks.push_back(0);
     }

@@ -33,6 +33,10 @@ public:
 
     std::unique_ptr<MidiCommand> visitFile(TabsParser::FileContext *context);
 
+    std::unique_ptr<MidiCommand> visitInstrument(TabsParser::InstrumentContext *context);
+
+    std::unique_ptr<MidiCommand> visitAttack(TabsParser::AttackContext *context);
+
     std::unique_ptr<MidiCommand> visitMeasures(TabsParser::MeasuresContext *context);
 
     std::unique_ptr<MidiCommand> visitNotes(TabsParser::NotesContext *context);

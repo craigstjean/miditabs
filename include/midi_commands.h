@@ -19,7 +19,9 @@ public:
         LineChange,
         Chords,
         NoteChange,
-        SubCommands
+        SubCommands,
+        Attack,
+        Instrument
     } type;
 
     virtual void execute(std::shared_ptr<MidiContext> context) = 0;
