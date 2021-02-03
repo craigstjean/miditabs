@@ -12,7 +12,8 @@ public:
 
     ~MidiFileWrapper()
     {
-        m_midi_file.write(m_filename);
+        if (!m_filename.empty())
+            m_midi_file.write(m_filename);
     }
 private:
     smf::MidiFile m_midi_file;

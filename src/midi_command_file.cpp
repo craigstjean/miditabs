@@ -2,7 +2,7 @@
 
 void MidiCommandFile::execute(std::shared_ptr<MidiContext> context)
 {
-
+    context->new_file(name);
 }
 
 void MidiCommandFile::os(std::ostream &out) const
