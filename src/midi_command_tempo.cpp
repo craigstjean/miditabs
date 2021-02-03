@@ -1,6 +1,6 @@
 #include "midi_command_tempo.h"
 
-void MidiCommandTempo::execute()
+void MidiCommandTempo::execute(std::shared_ptr<MidiContext> context)
 {
 
 }

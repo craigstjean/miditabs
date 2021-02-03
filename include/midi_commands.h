@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "midi_context.h"
+
 struct MidiNote
 {
     enum Note
@@ -41,7 +43,7 @@ public:
         SubCommands
     } type;
 
-    virtual void execute() = 0;
+    virtual void execute(std::shared_ptr<MidiContext> context) = 0;
     virtual void os(std::ostream&) const = 0;
 
     MidiCommand(MidiCommand::Type wantedType)

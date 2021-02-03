@@ -1,6 +1,6 @@
 #include "midi_command_note_change.h"
 
-void MidiCommandNoteChange::execute()
+void MidiCommandNoteChange::execute(std::shared_ptr<MidiContext> context)
 {
 
 }

@@ -1,6 +1,6 @@
 #include "midi_command_file.h"
 
-void MidiCommandFile::execute()
+void MidiCommandFile::execute(std::shared_ptr<MidiContext> context)
 {
 
 }

@@ -1,6 +1,6 @@
 #include "midi_command_tuning.h"
 
-void MidiCommandTuning::execute()
+void MidiCommandTuning::execute(std::shared_ptr<MidiContext> context)
 {
 
 }

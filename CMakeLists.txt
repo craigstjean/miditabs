@@ -24,6 +24,7 @@ set(SOURCE_FILES src/main.cpp
                  src/midi_command_sub_commands.cpp
                  src/midi_command_tempo.cpp
                  src/midi_command_tuning.cpp
+                 src/midi_context.cpp
                  src/antlr/TabsBaseVisitor.cpp
                  src/antlr/TabsLexer.cpp
                  src/antlr/TabsParser.cpp

@@ -10,6 +10,6 @@ public:
 
     double length;
 
-    virtual void execute() override;
+    virtual void execute(std::shared_ptr<MidiContext> context) override;
     virtual void os(std::ostream&) const override;
 };

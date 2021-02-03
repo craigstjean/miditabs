@@ -1,6 +1,6 @@
 #include "midi_command_line_change.h"
 
-void MidiCommandLineChange::execute()
+void MidiCommandLineChange::execute(std::shared_ptr<MidiContext> context)
 {
 
 }

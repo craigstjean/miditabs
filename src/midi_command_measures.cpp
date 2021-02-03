@@ -1,6 +1,6 @@
 #include "midi_command_measures.h"
 
-void MidiCommandMeasures::execute()
+void MidiCommandMeasures::execute(std::shared_ptr<MidiContext> context)
 {
 
 }

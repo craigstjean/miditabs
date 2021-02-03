@@ -10,11 +10,11 @@ const std::vector<std::shared_ptr<MidiCommand>> MidiCommandSubCommands::subcomma
     return m_subcommands;
 }
 
-void MidiCommandSubCommands::execute()
+void MidiCommandSubCommands::execute(std::shared_ptr<MidiContext> context)
 {
     for (auto sub : m_subcommands)
     {
-        sub->execute();
+        sub->execute(context);
     }
 }
 
