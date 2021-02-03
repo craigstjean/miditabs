@@ -198,12 +198,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
 
         if (text == ".")
         {
-            ++string_index;
-            long_number = false;
-        }
-        else if (text == "x")
-        {
-            notes.push_back(-1);
+            notes.push_back(-2); // TODO change to constant
             ++string_index;
 
             if (string_index == m_string_count)
@@ -212,8 +207,23 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
                 subcommand->chord_type = MidiCommandChords::ChordType::Play;
                 subcommand->values = notes;
                 command->add_subcommand(subcommand);
-                //std::vector<int> new_notes;
-                //notes = new_notes;
+                notes.clear();
+                string_index = 0;
+            }
+
+            long_number = false;
+        }
+        else if (text == "x")
+        {
+            notes.push_back(-1); // TODO change to constant
+            ++string_index;
+
+            if (string_index == m_string_count)
+            {
+                auto subcommand = std::make_shared<MidiCommandChords>();
+                subcommand->chord_type = MidiCommandChords::ChordType::Play;
+                subcommand->values = notes;
+                command->add_subcommand(subcommand);
                 notes.clear();
                 string_index = 0;
             }
@@ -269,8 +279,6 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
                     subcommand->chord_type = MidiCommandChords::ChordType::Play;
                     subcommand->values = notes;
                     command->add_subcommand(subcommand);
-                    //std::vector<int> new_notes;
-                    //notes = new_notes;
                     notes.clear();
                     string_index = 0;
                 }
@@ -284,8 +292,6 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
                 subcommand->chord_type = MidiCommandChords::ChordType::Play;
                 subcommand->values = notes;
                 command->add_subcommand(subcommand);
-                //std::vector<int> new_notes;
-                //notes = new_notes;
                 notes.clear();
             }
             
