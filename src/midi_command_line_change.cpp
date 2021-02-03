@@ -2,7 +2,7 @@
 
 void MidiCommandLineChange::execute(std::shared_ptr<MidiContext> context)
 {
-
+    context->current_track = line;
 }
 
 void MidiCommandLineChange::os(std::ostream &out) const

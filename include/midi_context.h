@@ -13,7 +13,10 @@ public:
     ~MidiFileWrapper()
     {
         if (!m_filename.empty())
+        {
+            m_midi_file.sortTracks();
             m_midi_file.write(m_filename);
+        }
     }
 private:
     smf::MidiFile m_midi_file;
@@ -23,7 +26,14 @@ private:
 class MidiContext
 {
 public:
+    MidiContext()
+    {
+        current_track = 0;
+    }
+
     void new_file(std::string filename);
+
+    int current_track;
 private:
     std::unique_ptr<MidiFileWrapper> m_midi_file;
 };
