@@ -3,7 +3,7 @@
 void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 {
     int channel = 0;
-    int velocity = 50;
+    int velocity = 40;
     int tick = context->track_tick(context->current_track);
     int tpq = context->midifile()->getTPQ();
 
@@ -11,13 +11,18 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 
     // pitch 72 = C5
     // C1 = 24
-    // 24 + ((letter - 1 - 'A') * 12) * (octave - 1)
-    // 24 + (('C' - 1 - 'A') * 12) * 5-1
-    // 24 + (1 * 12) * 5-1
+    // C = +0
+    // D = +2
+    // E = +4
+    // F = +5
+    // G = +7
+    // A = +9
+    // B = +11
+    // 24 + ((octave - 1) * 12) + X
     switch (chord_type)
     {
         case ChordType::Play:
-            endtick = tick + int(context->tick_speed * tpq);
+            endtick = tick + int(context->tick_speed * 2.0 * tpq);
 
             for (auto i = 0; i < values.size(); ++i)
             {
@@ -25,14 +30,40 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
                 if (values.at(i) >= 0)
                 {
                     auto string = context->tuning.at(i);
-                    int pitch = 24 + ((string.note - 'A' - 1) * 12) * (string.octave - 1);
+
+                    int pitch = 24 + (string.octave - 1) * 12;
+                    switch (string.note)
+                    {
+                        case MidiNote::Note::c:
+                            pitch += 0;
+                            break;
+                        case MidiNote::Note::d:
+                            pitch += 2;
+                            break;
+                        case MidiNote::Note::e:
+                            pitch += 4;
+                            break;
+                        case MidiNote::Note::f:
+                            pitch += 5;
+                            break;
+                        case MidiNote::Note::g:
+                            pitch += 7;
+                            break;
+                        case MidiNote::Note::a:
+                            pitch += 9;
+                            break;
+                        case MidiNote::Note::b:
+                            pitch += 11;
+                            break;
+                    }
+                    
                     if (string.type == MidiNote::Type::sharp)
                         ++pitch;
                     else if (string.type == MidiNote::Type::flat)
                         --pitch;
                     
                     pitch += values.at(i);
-                    
+
                     context->midifile()->addNoteOn (context->current_track, tick, channel, pitch, velocity);
                     context->midifile()->addNoteOff(context->current_track, endtick, channel, pitch);
                 }

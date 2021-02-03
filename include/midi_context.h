@@ -38,6 +38,8 @@ public:
     MidiContext()
     {
         current_track = 0;
+        tick_speed = 0.25;
+        current_tempo = 120;
     }
 
     void new_file(std::string filename);
@@ -49,6 +51,7 @@ public:
     void set_track_tick(int track, int tick);
 
     double tick_speed;
+    int current_tempo;
     
     std::vector<MidiNote> tuning;
 private:

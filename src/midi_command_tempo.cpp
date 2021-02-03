@@ -10,6 +10,8 @@ void MidiCommandTempo::execute(std::shared_ptr<MidiContext> context)
         tempo_event.setMetaTempo(tempo);
         context->midifile()->addEvent(tempo_event);
     }
+
+    context->current_tempo = tempo;
 }
 
 void MidiCommandTempo::os(std::ostream &out) const
