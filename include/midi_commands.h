@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ostream>
 #include <string>
 #include <vector>
@@ -39,76 +41,32 @@ public:
         SubCommands
     } type;
 
-    struct tuning
-    {
-        std::vector<MidiNote> notes;
-    } tuning;
+    virtual void execute() = 0;
+    virtual void os(std::ostream&) const = 0;
 
-    struct file
-    {
-        std::string name;
-    } file;
-
-    struct measures
-    {
-        int notes;
-        double length;
-    } measures;
-
-    struct notes
-    {
-        double length;
-    } notes;
-
-    struct tempo
-    {
-        int tempo;
-    } tempo;
-
-    struct line_change
-    {
-        int line;
-    } line_change;
-
-    struct chords
-    {
-        enum Type
-        {
-            Play, Rest, Repeat
-        } type;
-
-        std::vector<int> values;
-    } chords;
-
-    struct note_change
-    {
-        double length;
-    } note_change;
-
-    MidiCommand() {};
     MidiCommand(MidiCommand::Type wantedType)
         : type{wantedType}
     {
         
     }
 
-    void add_subcommand(std::shared_ptr<MidiCommand> command);
-    const std::vector<MidiCommand> subcommands();
+    virtual ~MidiCommand()
+    {
+
+    }
 
     friend std::ostream& operator<<(std::ostream &out, const MidiCommand& data);
-private:
-    std::vector<MidiCommand> m_subcommands;
 };
 
 class MidiCommands
 {
 public:
-    MidiCommands(std::vector<MidiCommand> commands)
+    MidiCommands(std::vector<std::shared_ptr<MidiCommand>> commands)
         : m_commands{commands}
     {
     }
 
-    const std::vector<MidiCommand> commands();
+    const std::vector<std::shared_ptr<MidiCommand>> commands();
 private:
-    std::vector<MidiCommand> m_commands;
+    std::vector<std::shared_ptr<MidiCommand>> m_commands;
 };

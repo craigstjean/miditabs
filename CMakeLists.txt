@@ -15,6 +15,15 @@ set(SOURCE_FILES src/main.cpp
                  src/processor.cpp
                  src/midi_visitor.cpp
                  src/midi_commands.cpp
+                 src/midi_command_chords.cpp
+                 src/midi_command_file.cpp
+                 src/midi_command_line_change.cpp
+                 src/midi_command_measures.cpp
+                 src/midi_command_note_change.cpp
+                 src/midi_command_notes.cpp
+                 src/midi_command_sub_commands.cpp
+                 src/midi_command_tempo.cpp
+                 src/midi_command_tuning.cpp
                  src/antlr/TabsBaseVisitor.cpp
                  src/antlr/TabsLexer.cpp
                  src/antlr/TabsParser.cpp

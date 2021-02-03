@@ -25,6 +25,6 @@ void Processor::execute()
 
     for (auto command : commands.commands())
     {
-        std::cout << command << std::endl;
+        std::cout << *command.get() << std::endl;
     }
 }

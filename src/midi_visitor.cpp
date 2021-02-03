@@ -4,26 +4,25 @@
 #include "midi_visitor.h"
 #include "midi_commands.h"
 
+#include "midi_command_chords.h"
+#include "midi_command_file.h"
+#include "midi_command_line_change.h"
+#include "midi_command_measures.h"
+#include "midi_command_note_change.h"
+#include "midi_command_notes.h"
+#include "midi_command_sub_commands.h"
+#include "midi_command_tempo.h"
+#include "midi_command_tuning.h"
+
 antlrcpp::Any MidiVisitor::visitTabs(TabsParser::TabsContext *context)
 {
     // tabs       : line+ EOF ;
-    std::vector<MidiCommand> commands;
+    std::vector<std::shared_ptr<MidiCommand>> commands;
 
     for (auto element : context->line())
     {
-        MidiCommand command = visitLine(element);
-
-        if (command.type == MidiCommand::Type::SubCommands)
-        {
-            for (auto sub : command.subcommands())
-            {
-                commands.push_back(sub);
-            }
-        }
-        else
-        {
-            commands.push_back(command);
-        }
+        auto command = visitLine(element);
+        commands.push_back(std::move(command));
     }
 
     antlrcpp::Any result = MidiCommands(commands);
@@ -31,7 +30,7 @@ antlrcpp::Any MidiVisitor::visitTabs(TabsParser::TabsContext *context)
     return result;
 }
 
-antlrcpp::Any MidiVisitor::visitLine(TabsParser::LineContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitLine(TabsParser::LineContext *context)
 {
     // line       : (tuning | file | measures | notes | tempo | line_chg | chords) NEWLINE ;
     if (context->tuning())
@@ -66,10 +65,10 @@ antlrcpp::Any MidiVisitor::visitLine(TabsParser::LineContext *context)
     throw TabInputError(std::string("Invalid command: " + context->getText()).c_str());
 }
 
-antlrcpp::Any MidiVisitor::visitTuning(TabsParser::TuningContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitTuning(TabsParser::TuningContext *context)
 {
     // tuning     : TUNING NOTE* ;
-    MidiCommand command(MidiCommand::Type::Tuning);
+    auto command = std::make_unique<MidiCommandTuning>();
     for (auto element : context->NOTE())
     {
         std::string text = element->getText();
@@ -128,7 +127,7 @@ antlrcpp::Any MidiVisitor::visitTuning(TabsParser::TuningContext *context)
             octave = text[1] - '0';
         }
         
-        command.tuning.notes.push_back(MidiNote
+        command->notes.push_back(MidiNote
             {
                 .note = note,
                 .type = type,
@@ -136,56 +135,56 @@ antlrcpp::Any MidiVisitor::visitTuning(TabsParser::TuningContext *context)
             });
     }
 
-    m_string_count = command.tuning.notes.size();
+    m_string_count = command->notes.size();
 
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitFile(TabsParser::FileContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitFile(TabsParser::FileContext *context)
 {
     // file       : FILE FILENAME ;
-    MidiCommand command(MidiCommand::Type::File);
-    command.file.name = context->FILENAME()->getText();
+    auto command = std::make_unique<MidiCommandFile>();
+    command->name = context->FILENAME()->getText();
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitMeasures(TabsParser::MeasuresContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitMeasures(TabsParser::MeasuresContext *context)
 {
     // measures   : MEASURES NUMBER SEP NUMBER ;
-    MidiCommand command(MidiCommand::Type::Measures);
-    command.measures.notes = std::stoi(context->NUMBER().at(0)->getText());
-    command.measures.length = 1 / std::stod(context->NUMBER().at(1)->getText());
+    auto command = std::make_unique<MidiCommandMeasures>();
+    command->notes = std::stoi(context->NUMBER().at(0)->getText());
+    command->length = 1 / std::stod(context->NUMBER().at(1)->getText());
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitNotes(TabsParser::NotesContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitNotes(TabsParser::NotesContext *context)
 {
     // notes      : NOTES NUMBER SEP NUMBER ;
-    MidiCommand command(MidiCommand::Type::Notes);
-    command.notes.length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
+    auto command = std::make_unique<MidiCommandNotes>();
+    command->length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitTempo(TabsParser::TempoContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitTempo(TabsParser::TempoContext *context)
 {
     // tempo      : TEMPO NUMBER ;
-    MidiCommand command(MidiCommand::Type::Tempo);
-    command.tempo.tempo = std::stoi(context->NUMBER()->getText());
+    auto command = std::make_unique<MidiCommandTempo>();
+    command->tempo = std::stoi(context->NUMBER()->getText());
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitLine_chg(TabsParser::Line_chgContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitLine_chg(TabsParser::Line_chgContext *context)
 {
     // line_chg   : LINE_CHG NUMBER ;
-    MidiCommand command(MidiCommand::Type::LineChange);
-    command.line_change.line = std::stoi(context->NUMBER()->getText());
+    auto command = std::make_unique<MidiCommandLineChange>();
+    command->line = std::stoi(context->NUMBER()->getText());
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 {
     // chords     : (EMPTY | MUTE | REST | REPEAT | NUMBER NUMBER_SEP? | note_chg)* ;
-    MidiCommand command(MidiCommand::Type::SubCommands);
+    auto command = std::make_unique<MidiCommandSubCommands>();
 
     bool long_number = false;
     int string_index = 0;
@@ -209,10 +208,10 @@ antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 
             if (string_index == m_string_count)
             {
-                auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::Chords);
-                subcommand->chords.type = MidiCommand::chords::Type::Play;
-                subcommand->chords.values = notes;
-                command.add_subcommand(subcommand);
+                auto subcommand = std::make_shared<MidiCommandChords>();
+                subcommand->chord_type = MidiCommandChords::ChordType::Play;
+                subcommand->values = notes;
+                command->add_subcommand(subcommand);
                 //std::vector<int> new_notes;
                 //notes = new_notes;
                 notes.clear();
@@ -223,21 +222,21 @@ antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
         }
         else if (text == "-")
         {
-            auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::Chords);
-            subcommand->chords.type = MidiCommand::chords::Type::Repeat;
-            command.add_subcommand(subcommand);
+            auto subcommand = std::make_shared<MidiCommandChords>();
+            subcommand->chord_type = MidiCommandChords::ChordType::Repeat;
+            command->add_subcommand(subcommand);
             long_number = false;
         }
         else if (text == "~")
         {
-            auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::Chords);
-            subcommand->chords.type = MidiCommand::chords::Type::Rest;
-            command.add_subcommand(subcommand);
+            auto subcommand = std::make_shared<MidiCommandChords>();
+            subcommand->chord_type = MidiCommandChords::ChordType::Rest;
+            command->add_subcommand(subcommand);
             long_number = false;
         }
         else if (text.length() > 0 && text[0] == 'N')
         {
-            auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::NoteChange);
+            auto subcommand = std::make_shared<MidiCommandNoteChange>();
             
             std::string note_count;
             std::string length;
@@ -253,8 +252,8 @@ antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 
             length = text.substr(start, end);
 
-            subcommand->note_change.length = std::stod(note_count) / std::stod(length);
-            command.add_subcommand(subcommand);
+            subcommand->length = std::stod(note_count) / std::stod(length);
+            command->add_subcommand(subcommand);
             long_number = false;
         }
         else if (text.length() > 0 && text[0] >= '0' && text[0] <= '9')
@@ -266,10 +265,10 @@ antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 
                 if (string_index == m_string_count)
                 {
-                    auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::Chords);
-                    subcommand->chords.type = MidiCommand::chords::Type::Play;
-                    subcommand->chords.values = notes;
-                    command.add_subcommand(subcommand);
+                    auto subcommand = std::make_shared<MidiCommandChords>();
+                    subcommand->chord_type = MidiCommandChords::ChordType::Play;
+                    subcommand->values = notes;
+                    command->add_subcommand(subcommand);
                     //std::vector<int> new_notes;
                     //notes = new_notes;
                     notes.clear();
@@ -281,10 +280,10 @@ antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
         {
             if (notes.size() > 0)
             {
-                auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::Chords);
-                subcommand->chords.type = MidiCommand::chords::Type::Play;
-                subcommand->chords.values = notes;
-                command.add_subcommand(subcommand);
+                auto subcommand = std::make_shared<MidiCommandChords>();
+                subcommand->chord_type = MidiCommandChords::ChordType::Play;
+                subcommand->values = notes;
+                command->add_subcommand(subcommand);
                 //std::vector<int> new_notes;
                 //notes = new_notes;
                 notes.clear();
@@ -305,19 +304,19 @@ antlrcpp::Any MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 
     if (notes.size() > 0)
     {
-        auto subcommand = std::make_shared<MidiCommand>(MidiCommand::Type::Chords);
-        subcommand->chords.type = MidiCommand::chords::Type::Play;
-        subcommand->chords.values = notes;
-        command.add_subcommand(subcommand);
+        auto subcommand = std::make_shared<MidiCommandChords>();
+        subcommand->chord_type = MidiCommandChords::ChordType::Play;
+        subcommand->values = notes;
+        command->add_subcommand(subcommand);
     }
 
     return command;
 }
 
-antlrcpp::Any MidiVisitor::visitNote_chg(TabsParser::Note_chgContext *context)
+std::unique_ptr<MidiCommand> MidiVisitor::visitNote_chg(TabsParser::Note_chgContext *context)
 {
     // note_chg   : NOTE_CHANGE NUMBER SEP NUMBER ;
-    MidiCommand command(MidiCommand::Type::NoteChange);
-    command.note_change.length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
+    auto command = std::make_unique<MidiCommandNoteChange>();
+    command->length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
     return command;
 }
