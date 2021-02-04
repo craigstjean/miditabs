@@ -12,8 +12,8 @@ What things you need to install the software and how to install them
 
 ```
 C++ Compiler
-cmake (https://cmake.org)
-ninja (https://ninja-build.org)
+[cmake](https://cmake.org)
+[ninja](https://ninja-build.org) (optional)
 Java (to generate ANTLR4 files, not for runtime)
 VSCode (optional)
 ```
