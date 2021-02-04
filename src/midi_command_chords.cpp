@@ -71,9 +71,10 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 
             break;
         case ChordType::Repeat:
-        break;
+            // TODO!
+            break;
         case ChordType::Rest:
-            endtick = tick + int(context->tick_speed * tpq);
+            endtick = tick + int(context->tick_speed * 2.0 * tpq);
             break;
         default:
         break;

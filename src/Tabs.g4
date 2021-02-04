@@ -17,7 +17,7 @@ measures   : MEASURES NUMBER SEP NUMBER ;
 notes      : NOTES NUMBER SEP NUMBER ;
 tempo      : TEMPO NUMBER ;
 line_chg   : LINE_CHG NUMBER ;
-chords     : (EMPTY | MUTE | REST | REPEAT | NUMBER NUMBER_SEP? | note_chg | WHITESPACE)* ;
+chords     : (EMPTY | MUTE | REST | REPEAT | NUMBER_SEP | NUMBER | note_chg | WHITESPACE)* ;
 note_chg   : NOTE_CHANGE NUMBER SEP NUMBER ;
 
 /*
