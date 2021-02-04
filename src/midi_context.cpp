@@ -10,6 +10,12 @@ void MidiContext::new_file(std::string filename)
     tempo_event.tick = 0;
     tempo_event.setMetaTempo(current_tempo);
     m_midi_file->get()->addEvent(tempo_event);
+
+    if (instrument != 0)
+    {
+        m_midi_file->get()->addTimbre(0, 0, 0, instrument);
+        m_track_ticks.push_back(0);
+    }
 }
 
 std::shared_ptr<smf::MidiFile> MidiFileWrapper::get()
