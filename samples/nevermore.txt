@@ -1,0 +1,17 @@
+Tuning A#1 D#2 G#2 C#3 F#3 A#3 D#4
+
+File this_godless_endeavor_nevermore.mid
+Measures 4/4
+Tempo 80
+Attack 30
+Instrument 28
+
+Line 1
+N6/4 022 N1/2 .355 .022 .577 .355 N1/4 133 N1/12 1 1 1
+N6/4 022 N1/2 .355 .022 .577 .355 .8_10_10
+N6/4 .355 N1/2 .577 N6/4 .476 N1/2 .577
+N6/4 .355 N1/2 .577 N6/4 .022
+Line 2
+N1/2 ~ N1/1 .....0 N1/2 ~ N1/1 ~ N1/1 ~
+N1/2 ~ N1/1 .....0 N1/2 ~ N1/1 ~ N1/1 ~
+

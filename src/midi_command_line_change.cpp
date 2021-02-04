@@ -3,6 +3,12 @@
 void MidiCommandLineChange::execute(std::shared_ptr<MidiContext> context)
 {
     context->current_track = line;
+
+    while (context->track_count() < line + 1)
+    {
+        context->midifile().get()->addTrack(1);
+        context->set_track_tick(context->track_count(), 0);
+    }
 }
 
 void MidiCommandLineChange::os(std::ostream &out) const
