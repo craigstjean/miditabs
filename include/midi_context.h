@@ -58,6 +58,7 @@ public:
     int instrument;
     
     std::vector<MidiNote> tuning;
+    std::vector<int> last_chord;
 private:
     std::unique_ptr<MidiFileWrapper> m_midi_file;
     std::vector<int> m_track_ticks;

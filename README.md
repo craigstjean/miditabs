@@ -73,7 +73,7 @@ Tab Syntax:
 * Use '.' to skip a string
 * Use 'x' to play a muted note (not implemented)
 * Use '~' to rest
-* Use '-' to repeat the previous chord (not implemented)
+* Use '-' to repeat the previous chord
 * Measures can be seperated with '|'. This makes it easier to read but has no impact on the final result, and measures are not verified to be valid
 * Use _ to identify frets 10 and above
 * Use N followed by a note length to change in the middle of a series of notes

@@ -9,6 +9,12 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 
     int endtick = tick;
 
+    if (chord_type == ChordType::Repeat)
+    {
+        values = context->last_chord;
+        chord_type = ChordType::Play;
+    }
+
     // pitch 72 = C5
     // C1 = 24
     // C = +0
@@ -23,6 +29,7 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
     {
         case ChordType::Play:
             endtick = tick + int(context->tick_speed * 2.0 * tpq);
+            context->last_chord = values;
 
             for (auto i = 0; i < values.size(); ++i)
             {
@@ -71,7 +78,7 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 
             break;
         case ChordType::Repeat:
-            // TODO!
+            // Already handled
             break;
         case ChordType::Rest:
             endtick = tick + int(context->tick_speed * 2.0 * tpq);
