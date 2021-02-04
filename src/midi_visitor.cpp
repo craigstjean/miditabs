@@ -209,7 +209,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitLine_chg(TabsParser::Line_chgCont
 
 std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 {
-    // chords     : (EMPTY | MUTE | REST | REPEAT | NUMBER NUMBER_SEP? | note_chg)* ;
+    // chords     : (EMPTY | REST | REPEAT | NUMBER | NUMBER_SEP? | note_chg)* ;
     auto command = std::make_unique<MidiCommandSubCommands>();
 
     bool long_number = false;
@@ -225,23 +225,6 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
         if (text == ".")
         {
             notes.push_back(-2); // TODO change to constant
-            ++string_index;
-
-            if (string_index == m_string_count)
-            {
-                auto subcommand = std::make_shared<MidiCommandChords>();
-                subcommand->chord_type = MidiCommandChords::ChordType::Play;
-                subcommand->values = notes;
-                command->add_subcommand(subcommand);
-                notes.clear();
-                string_index = 0;
-            }
-
-            long_number = false;
-        }
-        else if (text == "x")
-        {
-            notes.push_back(-1); // TODO change to constant
             ++string_index;
 
             if (string_index == m_string_count)

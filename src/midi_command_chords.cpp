@@ -33,7 +33,7 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 
             for (auto i = 0; i < values.size(); ++i)
             {
-                // TODO -2 is nothing, -1 is muted
+                // TODO -2 is nothing
                 if (values.at(i) >= 0)
                 {
                     auto string = context->tuning.at(i);

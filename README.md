@@ -71,7 +71,6 @@ Tab Syntax:
 * Each strum is indicated by a series of numbers, followed by a space or end of line
 * Numbers represent the fret on the string, and are in the order of the strings defined in the tuning
 * Use '.' to skip a string
-* Use 'x' to play a muted note (not implemented)
 * Use '~' to rest
 * Use '-' to repeat the previous chord
 * Measures can be seperated with '|'. This makes it easier to read but has no impact on the final result, and measures are not verified to be valid

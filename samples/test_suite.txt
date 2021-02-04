@@ -14,10 +14,6 @@ File rests.mid
 Notes 1/4
 2 ~ 2 ~ N1/2 2 ~ 2 ~ 2
 
-File mutes.mid
-Notes 1/4
-x xx xxx xxxx xxxxx xxxxxx
-
 File repeats.mid
 320003 - - -
 
