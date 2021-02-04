@@ -10,13 +10,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
-```
-C++ Compiler
-[cmake](https://cmake.org)
-[ninja](https://ninja-build.org) (optional)
-Java (to generate ANTLR4 files, not for runtime)
-VSCode (optional)
-```
+* C++ Compiler
+* [cmake](https://cmake.org)
+* [ninja](https://ninja-build.org) (optional)
+* Java (to generate ANTLR4 files, not for runtime)
+* VSCode (optional)
 
 ### Installing
 
