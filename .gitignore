@@ -6,8 +6,6 @@ dist
 .ionide
 .DS_Store
 
-deps/antlr-4.9.1-complete.jar
-
 src/.antlr
 src/antlr
 
