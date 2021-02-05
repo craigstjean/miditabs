@@ -4,13 +4,13 @@
 #include "midi_visitor.h"
 #include "midi_commands.h"
 
+#include "midi_command_adjust_tick.h"
 #include "midi_command_attack.h"
 #include "midi_command_chords.h"
 #include "midi_command_file.h"
 #include "midi_command_instrument.h"
 #include "midi_command_line_change.h"
 #include "midi_command_measures.h"
-#include "midi_command_note_change.h"
 #include "midi_command_notes.h"
 #include "midi_command_sub_commands.h"
 #include "midi_command_tempo.h"
@@ -185,9 +185,14 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitMeasures(TabsParser::MeasuresCont
 
 std::unique_ptr<MidiCommand> MidiVisitor::visitNotes(TabsParser::NotesContext *context)
 {
-    // notes      : NOTES NUMBER SEP NUMBER ;
+    // notes      : NOTES NUMBER (SEP NUMBER)? ;
     auto command = std::make_unique<MidiCommandNotes>();
-    command->length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
+
+    if (context->SEP())
+        command->length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
+    else
+        command->length = std::stod(context->NUMBER().at(0)->getText());
+
     return command;
 }
 
@@ -255,23 +260,63 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
         }
         else if (text.length() > 0 && text[0] == 'N')
         {
-            auto subcommand = std::make_shared<MidiCommandNoteChange>();
+            auto subcommand = std::make_shared<MidiCommandNotes>();
             
             std::string note_count;
             std::string length;
 
             auto start = 1;
             auto end = text.find("/");
-            if (end != std::string::npos)
+            if (end == std::string::npos)
+            {
+                subcommand->length = std::stod(text.substr(1));
+            }
+            else
             {
                 note_count = text.substr(start, end - start);
                 start = end + 1;
                 end = text.find("/", start);
+
+                length = text.substr(start, end);
+
+                subcommand->length = std::stod(note_count) / std::stod(length);
             }
 
-            length = text.substr(start, end);
+            command->add_subcommand(subcommand);
+            long_number = false;
+        }
+        else if (text.length() > 0 && text[0] == 'A')
+        {
+            auto subcommand = std::make_shared<MidiCommandAttack>();
+            subcommand->velocity = std::stoi(text.substr(1));
+            command->add_subcommand(subcommand);
+            long_number = false;
+        }
+        else if (text.length() > 0 && text[0] == 'R')
+        {
+            auto subcommand = std::make_shared<MidiCommandAdjustTick>();
+            subcommand->forward = false;
+            
+            std::string note_count;
+            std::string length;
 
-            subcommand->length = std::stod(note_count) / std::stod(length);
+            auto start = 1;
+            auto end = text.find("/");
+            if (end == std::string::npos)
+            {
+                subcommand->adjustment = std::stod(text.substr(1));
+            }
+            else
+            {
+                note_count = text.substr(start, end - start);
+                start = end + 1;
+                end = text.find("/", start);
+
+                length = text.substr(start, end);
+
+                subcommand->adjustment = std::stod(note_count) / std::stod(length);
+            }
+
             command->add_subcommand(subcommand);
             long_number = false;
         }
@@ -325,13 +370,5 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
         command->add_subcommand(subcommand);
     }
 
-    return command;
-}
-
-std::unique_ptr<MidiCommand> MidiVisitor::visitNote_chg(TabsParser::Note_chgContext *context)
-{
-    // note_chg   : NOTE_CHANGE NUMBER SEP NUMBER ;
-    auto command = std::make_unique<MidiCommandNoteChange>();
-    command->length = std::stod(context->NUMBER().at(0)->getText()) / std::stod(context->NUMBER().at(1)->getText());
     return command;
 }

@@ -47,8 +47,6 @@ public:
 
     std::unique_ptr<MidiCommand> visitChords(TabsParser::ChordsContext *context);
 
-    std::unique_ptr<MidiCommand> visitNote_chg(TabsParser::Note_chgContext *context);
-
 private:
     int m_string_count;
 };

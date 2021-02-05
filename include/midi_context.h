@@ -40,7 +40,7 @@ public:
         current_track = 0;
         tick_speed = 0.25;
         current_tempo = 120;
-        velocity = 25;
+        velocity = 100;
         instrument = 0;
     }
 

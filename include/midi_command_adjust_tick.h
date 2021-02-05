@@ -2,13 +2,14 @@
 
 #include "midi_commands.h"
 
-class MidiCommandNoteChange : public MidiCommand
+class MidiCommandAdjustTick : public MidiCommand
 {
 public:
-    MidiCommandNoteChange()
-        : MidiCommand(MidiCommand::Type::NoteChange) { }
+    MidiCommandAdjustTick()
+        : MidiCommand(MidiCommand::Type::AdjustTick) { }
 
-    double length;
+    bool forward;
+    double adjustment;
 
     virtual void execute(std::shared_ptr<MidiContext> context) override;
     virtual void os(std::ostream&) const override;

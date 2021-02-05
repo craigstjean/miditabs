@@ -21,7 +21,8 @@ public:
         NoteChange,
         SubCommands,
         Attack,
-        Instrument
+        Instrument,
+        AdjustTick
     } type;
 
     virtual void execute(std::shared_ptr<MidiContext> context) = 0;

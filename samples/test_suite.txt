@@ -4,7 +4,7 @@ File chords.mid
 Measures 4/4
 Notes 1/2
 Tempo 80
-Attack 30
+Attack 100
 Instrument 28
 022100 022000 020100 020000 .21202 .02220 .02020 .02210 .02010
 .02120 ..0232 ..0212 ..0231 ..0211 ..0222 .32010 .32310 .32000
@@ -22,3 +22,8 @@ File scale.mid
 ....._10 .....8 ...._11 ....8 ..._10 ...7 .._10 ..8
 ._10 .8 _10 8 _10 .8 ._10
 
+File mid_attack.mid
+A10 3 A25 3 A50 3 A75 3 A100 3
+
+File reverse_reverse.mid
+N1 3 R1/2 .2

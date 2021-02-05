@@ -4,7 +4,6 @@ File std1.mid
 Measures 4/4
 Notes 1/8
 Tempo 80
-Attack 30
 Instrument 28
 2 .2 ..0 .2 2 .2 ..0 .2 | 2 .0 ..0 .0 2 .0 ..0 .0 | 0 .2 ..2 .2 0 .2 ..2 .2 | 2 .0 ..4 .0 2 .0 ..2 .0
 

@@ -14,11 +14,10 @@ file       : FILE FILENAME ;
 instrument : INSTRUMENT NUMBER ;
 attack     : ATTACK NUMBER ;
 measures   : MEASURES NUMBER SEP NUMBER ;
-notes      : NOTES NUMBER SEP NUMBER ;
+notes      : NOTES NUMBER (SEP NUMBER)? ;
 tempo      : TEMPO NUMBER ;
 line_chg   : LINE_CHG NUMBER ;
-chords     : (EMPTY | REST | REPEAT | NUMBER_SEP | NUMBER | note_chg | WHITESPACE)* ;
-note_chg   : NOTE_CHANGE NUMBER SEP NUMBER ;
+chords     : (EMPTY | REST | REPEAT | NUMBER_SEP | NUMBER | NOTE_CHG | ATTACK_CHG | REWIND | WHITESPACE | MEASURE_SP)+ ;
 
 /*
  * Lexer Rules
@@ -42,8 +41,10 @@ NUMBER_SEP : '_' ;
 
 NOTE       : [A-Ga-g][b#]?[1-8] ;
 FILENAME   : [A-Za-z0-9_.]+ '.mid' 'i'? ;
-NOTE_CHANGE : 'N' ;
+NOTE_CHG   : 'N' NUMBER (SEP NUMBER)? ;
+ATTACK_CHG : 'A' NUMBER ;
+REWIND     : 'R' NUMBER (SEP NUMBER)? ;
 
 NEWLINE    : ('\r'? '\n' | '\r')+ { ignore = false; } ;
 WHITESPACE : (' ' | '\t') { if (ignore) skip(); } ;
-MEASURE_SP : '|' -> skip ;
+MEASURE_SP : '|' ;

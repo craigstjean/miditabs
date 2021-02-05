@@ -76,6 +76,8 @@ Tab Syntax:
 * Measures can be seperated with '|'. This makes it easier to read but has no impact on the final result, and measures are not verified to be valid
 * Use _ to identify frets 10 and above
 * Use N followed by a note length to change in the middle of a series of notes
+* Use A followed by a value to change the attack in the middle of a series of notes
+* Use R followed by a note length to *rewind* the current track in the middle of a series of notes (to allow playing a note at the same time as another, while the other is still playing)
 * Examples:
     * 202 - Play the 6th string fret 2, the 5th string open, and the 4th string fret 2 all together
     * .2 - Play only the 5th string fret 2
@@ -83,7 +85,9 @@ Tab Syntax:
     * 2.2.2 - Play the 6th string, 4th string, and 2nd string fret 2 at the same time
     * 2\_10\_2 - Play the 6th string fret 2, the 5th string fret 10, and the 4th string fret 2 at the same time
     * 2 2 2 - Play the 6th string fret 2, 3 times in a row
-    * N1/2 2 N1/4 2 2 - Paly the 6th string fret 2 for a half note, then the 6th string fret 2 twice with quarter notes
+    * N1/2 2 N1/4 2 2 - Play the 6th string fret 2 for a half note, then the 6th string fret 2 twice with quarter notes
+    * A50 - Change the attack speed to 50
+    * N1 3 R1/2 .3 - Play the 6th string fret 3 for a whole note, and half way through add in a whole note on the 5th string fret 3
 
 ### Sample
 
