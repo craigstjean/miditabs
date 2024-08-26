@@ -16,7 +16,7 @@
 #include "midi_command_tempo.h"
 #include "midi_command_tuning.h"
 
-antlrcpp::Any MidiVisitor::visitTabs(TabsParser::TabsContext *context)
+std::unique_ptr<MidiCommands> MidiVisitor::visitTabs(TabsParser::TabsContext *context)
 {
     // tabs       : line+ EOF ;
     std::vector<std::shared_ptr<MidiCommand>> commands;
@@ -27,7 +27,7 @@ antlrcpp::Any MidiVisitor::visitTabs(TabsParser::TabsContext *context)
         commands.push_back(std::move(command));
     }
 
-    antlrcpp::Any result = MidiCommands(commands);
+    auto result = std::make_unique<MidiCommands>(commands);
 
     return result;
 }
@@ -136,7 +136,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitTuning(TabsParser::TuningContext 
         {
             octave = text[1] - '0';
         }
-        
+
         command->notes.push_back(MidiNote
             {
                 .note = note,
@@ -261,7 +261,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
         else if (text.length() > 0 && text[0] == 'N')
         {
             auto subcommand = std::make_shared<MidiCommandNotes>();
-            
+
             std::string note_count;
             std::string length;
 
@@ -285,6 +285,13 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
             command->add_subcommand(subcommand);
             long_number = false;
         }
+        else if (text.length() > 0 && text[0] == 'I')
+        {
+            auto subcommand = std::make_shared<MidiCommandInstrument>();
+            subcommand->instrument = std::stoi(text.substr(1));
+            command->add_subcommand(subcommand);
+            long_number = false;
+        }
         else if (text.length() > 0 && text[0] == 'A')
         {
             auto subcommand = std::make_shared<MidiCommandAttack>();
@@ -296,7 +303,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
         {
             auto subcommand = std::make_shared<MidiCommandAdjustTick>();
             subcommand->forward = false;
-            
+
             std::string note_count;
             std::string length;
 
@@ -348,7 +355,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext 
                 command->add_subcommand(subcommand);
                 notes.clear();
             }
-            
+
             string_index = 0;
             long_number = false;
         }

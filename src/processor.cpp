@@ -21,15 +21,15 @@ void Processor::execute()
     TabsParser::TabsContext* tree = parser.tabs();
 
     MidiVisitor visitor;
-    MidiCommands commands = visitor.visitTabs(tree);
+    auto commands = visitor.visitTabs(tree);
 
-    for (auto command : commands.commands())
+    for (auto command : commands->commands())
     {
         std::cout << *command.get() << std::endl;
     }
 
     std::shared_ptr<MidiContext> context = std::make_shared<MidiContext>();
-    for (auto command : commands.commands())
+    for (auto command : commands->commands())
     {
         command->execute(context);
     }

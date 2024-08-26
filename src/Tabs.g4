@@ -17,11 +17,12 @@ measures   : MEASURES NUMBER SEP NUMBER ;
 notes      : NOTES NUMBER (SEP NUMBER)? ;
 tempo      : TEMPO NUMBER ;
 line_chg   : LINE_CHG NUMBER ;
-chords     : (EMPTY | REST | REPEAT | NUMBER_SEP | NUMBER | NOTE_CHG | ATTACK_CHG | REWIND | WHITESPACE | MEASURE_SP)+ ;
+chords     : (EMPTY | REST | REPEAT | NUMBER_SEP | NUMBER | NOTE_CHG | ATTACK_CHG | INST_CHG | REWIND | WHITESPACE | MEASURE_SP)+ ;
 
 /*
  * Lexer Rules
  */
+COMMENT    : '#' .*? NEWLINE -> channel(HIDDEN) ;
 TUNING     : 'Tuning' { ignore = true; } ;
 FILE       : 'File' { ignore = true; } ;
 INSTRUMENT : 'Instrument' { ignore = true; };
@@ -43,6 +44,7 @@ NOTE       : [A-Ga-g][b#]?[1-8] ;
 FILENAME   : [A-Za-z0-9_.]+ '.mid' 'i'? ;
 NOTE_CHG   : 'N' NUMBER (SEP NUMBER)? ;
 ATTACK_CHG : 'A' NUMBER ;
+INST_CHG   : 'I' NUMBER ;
 REWIND     : 'R' NUMBER (SEP NUMBER)? ;
 
 NEWLINE    : ('\r'? '\n' | '\r')+ { ignore = false; } ;

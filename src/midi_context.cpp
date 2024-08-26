@@ -38,11 +38,6 @@ int MidiContext::track_count()
 
 int MidiContext::track_tick(int track)
 {
-    // Piano = 0
-    // Acoustic = 26
-    // Electric = 28
-    // Overdriven = 30
-    // Distortion = 31
     while (m_track_ticks.size() < track + 1)
     {
         int track = m_track_ticks.size();
@@ -50,7 +45,12 @@ int MidiContext::track_tick(int track)
         m_midi_file->get()->addTimbre(track, 0, channel, instrument);
         m_track_ticks.push_back(0);
     }
-    
+
+    return m_track_ticks[track];
+}
+
+int MidiContext::get_track_tick(int track)
+{
     return m_track_ticks[track];
 }
 

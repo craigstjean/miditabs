@@ -3,7 +3,7 @@
 void MidiCommandInstrument::execute(std::shared_ptr<MidiContext> context)
 {
     context->instrument = instrument;
-    context->midifile().get()->addTimbre(0, 0, 0, instrument);
+    context->midifile().get()->addTimbre(0, context->get_track_tick(0), 0, instrument);
 }
 
 void MidiCommandInstrument::os(std::ostream &out) const

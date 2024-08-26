@@ -25,7 +25,7 @@ private:
 class  MidiVisitor {
 public:
 
-    antlrcpp::Any visitTabs(TabsParser::TabsContext *context);
+    std::unique_ptr<MidiCommands> visitTabs(TabsParser::TabsContext *context);
 
     std::unique_ptr<MidiCommand> visitLine(TabsParser::LineContext *context);
 

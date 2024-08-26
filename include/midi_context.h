@@ -50,13 +50,14 @@ public:
     int current_track;
     int track_count();
     int track_tick(int track);
+    int get_track_tick(int track);
     void set_track_tick(int track, int tick);
 
     double tick_speed;
     int current_tempo;
     int velocity;
     int instrument;
-    
+
     std::vector<MidiNote> tuning;
     std::vector<int> last_chord;
 private:
