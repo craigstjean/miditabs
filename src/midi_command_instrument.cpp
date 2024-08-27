@@ -2,8 +2,9 @@
 
 void MidiCommandInstrument::execute(std::shared_ptr<MidiContext> context)
 {
-    context->instrument = instrument;
-    context->midifile().get()->addTimbre(0, context->get_track_tick(0), 0, instrument);
+    auto track = context->current_track;
+    context->set_instrument(track, instrument);
+    context->midifile().get()->addTimbre(track, context->get_track_tick(track), track, instrument);
 }
 
 void MidiCommandInstrument::os(std::ostream &out) const

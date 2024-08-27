@@ -2,7 +2,7 @@
 
 void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
 {
-    int channel = 0;
+    int channel = context->current_track;
     int velocity = context->velocity;
     int tick = context->track_tick(context->current_track);
     int tpq = context->midifile()->getTPQ();
@@ -63,12 +63,12 @@ void MidiCommandChords::execute(std::shared_ptr<MidiContext> context)
                             pitch += 11;
                             break;
                     }
-                    
+
                     if (string.type == MidiNote::Type::sharp)
                         ++pitch;
                     else if (string.type == MidiNote::Type::flat)
                         --pitch;
-                    
+
                     pitch += values.at(i);
 
                     context->midifile()->addNoteOn (context->current_track, tick, channel, pitch, velocity);

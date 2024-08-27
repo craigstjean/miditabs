@@ -4,6 +4,8 @@ void MidiContext::new_file(std::string filename)
 {
     current_track = 0;
     m_track_ticks.clear();
+
+    m_instruments.clear();
     m_midi_file = std::make_unique<MidiFileWrapper>(filename);
 
     smf::MidiEvent tempo_event;
@@ -11,9 +13,9 @@ void MidiContext::new_file(std::string filename)
     tempo_event.setMetaTempo(current_tempo);
     m_midi_file->get()->addEvent(tempo_event);
 
-    if (instrument != 0)
+    if (recent_instrument != 0)
     {
-        m_midi_file->get()->addTimbre(0, 0, 0, instrument);
+        m_midi_file->get()->addTimbre(0, 0, 0, recent_instrument);
         m_track_ticks.push_back(0);
     }
 }
@@ -41,8 +43,8 @@ int MidiContext::track_tick(int track)
     while (m_track_ticks.size() < track + 1)
     {
         int track = m_track_ticks.size();
-        int channel = 0;
-        m_midi_file->get()->addTimbre(track, 0, channel, instrument);
+        int channel = track;
+        m_midi_file->get()->addTimbre(track, 0, channel, recent_instrument);
         m_track_ticks.push_back(0);
     }
 
@@ -59,10 +61,27 @@ void MidiContext::set_track_tick(int track, int tick)
     while (m_track_ticks.size() < track + 1)
     {
         int track = m_track_ticks.size();
-        int channel = 0;
-        m_midi_file->get()->addTimbre(track, 0, channel, instrument);
+        int channel = track;
+        m_midi_file->get()->addTimbre(track, 0, channel, recent_instrument);
         m_track_ticks.push_back(0);
     }
 
     m_track_ticks[track] = tick;
+}
+
+int MidiContext::get_instrument(int track)
+{
+    return m_instruments[track];
+}
+
+void MidiContext::set_instrument(int track, int instrument)
+{
+    while (m_instruments.size() < track + 1)
+    {
+        int track = m_track_ticks.size();
+        m_instruments.push_back(0);
+    }
+
+    m_instruments[track] = instrument;
+    recent_instrument = instrument;
 }

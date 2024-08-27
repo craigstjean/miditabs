@@ -41,7 +41,7 @@ public:
         tick_speed = 0.25;
         current_tempo = 120;
         velocity = 100;
-        instrument = 0;
+        recent_instrument = 0;
     }
 
     void new_file(std::string filename);
@@ -53,14 +53,18 @@ public:
     int get_track_tick(int track);
     void set_track_tick(int track, int tick);
 
+    int get_instrument(int track);
+    void set_instrument(int track, int instrument);
+
     double tick_speed;
     int current_tempo;
     int velocity;
-    int instrument;
+    int recent_instrument;
 
     std::vector<MidiNote> tuning;
     std::vector<int> last_chord;
 private:
     std::unique_ptr<MidiFileWrapper> m_midi_file;
     std::vector<int> m_track_ticks;
+    std::vector<int> m_instruments;
 };

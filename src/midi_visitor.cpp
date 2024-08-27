@@ -214,7 +214,7 @@ std::unique_ptr<MidiCommand> MidiVisitor::visitLine_chg(TabsParser::Line_chgCont
 
 std::unique_ptr<MidiCommand> MidiVisitor::visitChords(TabsParser::ChordsContext *context)
 {
-    // chords     : (EMPTY | REST | REPEAT | NUMBER | NUMBER_SEP? | note_chg)* ;
+    // chords     : (EMPTY | REST | REPEAT | NUMBER | NUMBER_SEP? | NOTE_CHG | ATTACK_CHG | INST_CHG | REWIND | WHITESPACE | MEASURE_SP)+ ;
     auto command = std::make_unique<MidiCommandSubCommands>();
 
     bool long_number = false;

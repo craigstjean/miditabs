@@ -6,7 +6,7 @@ dist
 .ionide
 .DS_Store
 
-.mid
+*.mid
 
 src/.antlr
 src/antlr
